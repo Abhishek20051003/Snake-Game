@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <conio.h> // For Windows, to use kbhit() and getch() functions
+#include <conio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <unistd.h> // For usleep() function
+#include <unistd.h>
 
 #define WIDTH 20
 #define HEIGHT 20
@@ -18,7 +18,7 @@ int headX, headY;
 int fruitX, fruitY;
 int direction;
 int tailX[100], tailY[100];
-int lives; // Number of lives
+int lives;
 
 void Setup() {
     gameOver = 0;
@@ -29,10 +29,9 @@ void Setup() {
     fruitX = rand() % WIDTH;
     fruitY = rand() % HEIGHT;
     direction = RIGHT;
-    lives = 3; // Initialize lives to 3
+    lives = 3;
 }
 
-// Function to draw the game board
 void Draw() {
     system("cls");
     int i, j;
@@ -45,19 +44,19 @@ void Draw() {
             if (j == 0)
                 printf("#");
             if (i == headY && j == headX)
-                printf("O"); // Display snake's head
+                printf("O"); 
             else if (i == fruitY && j == fruitX)
-                printf("*"); // Display fruit
+                printf("*");
             else {
                 int printTail = 0;
                 for (int k = 0; k < length; k++) {
                     if (tailX[k] == j && tailY[k] == i) {
-                        printf("o"); // Display snake's body
+                        printf("o");
                         printTail = 1;
                     }
                 }
                 if (!printTail)
-                    printf(" "); // Empty space
+                    printf(" ");
             }
             if (j == WIDTH - 1)
                 printf("#");
@@ -68,11 +67,10 @@ void Draw() {
     for (i = 0; i < WIDTH + 2; i++)
         printf("#");
     printf("\n");
-    printf("Score: %d\tLives: %d", score, lives); // Display score and lives
+    printf("Score: %d\tLives: %d", score, lives);
     printf("\n");
 }
 
-// Function to handle user input
 void Input() {
     if (_kbhit()) {
         switch (_getch()) {
@@ -95,7 +93,6 @@ void Input() {
     }
 }
 
-// Function to update the game logic
 void Logic() {
     int prevX = tailX[0];
     int prevY = tailY[0];
@@ -127,19 +124,18 @@ void Logic() {
             break;
     }
     if (headX >= WIDTH || headX < 0 || headY >= HEIGHT || headY < 0) {
-        lives--; // Decrement lives when the snake collides with the walls
+        lives--;
         if (lives == 0)
-            gameOver = 1; // Game over if lives reach zero
-        // Move head to opposite side if it hits the wall
+            gameOver = 1;
         headX = (headX + WIDTH) % WIDTH;
         headY = (headY + HEIGHT) % HEIGHT;
     }
 
     for (int i = 0; i < length; i++) {
         if (tailX[i] == headX && tailY[i] == headY) {
-            lives--; // Decrease lives when the snake collides with itself
+            lives--;
             if (lives == 0)
-                gameOver = 1; // Game over if lives reach zero
+                gameOver = 1;
         }
     }
 
@@ -151,7 +147,6 @@ void Logic() {
     }
 }
 
-// Main function
 int main() {
     srand(time(NULL));
     Setup();
@@ -159,7 +154,7 @@ int main() {
         Draw();
         Input();
         Logic();
-        usleep(100000); // Delay of 100 milliseconds (100000 microseconds)
+        usleep(100000);
     }
     printf("Game Over!\n");
     return 0;
